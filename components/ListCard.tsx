@@ -1,31 +1,26 @@
-
 'use client'
+import Card from '../components/Card';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/redux/store'
+
 import React from 'react'
-import type { RootState } from '../redux/store'
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '../redux/slice/counterReducer'
 
-export default function ListCard() {
-  const count = useSelector((state: RootState) => state.counter.value)
-  const dispatch = useDispatch()
-
+const ListCard = () => {
+  const filteredCountries = useSelector((state: RootState) => state.country.filteredCountries)
   return (
-    <div>
-      <div>
-        <button
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          Increment
-        </button>
-        <span>{count}</span>
-        <button
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          Decrement
-        </button>
-      </div>
-    </div>
+    
+    <div className="flex flex-wrap justify-center  gap-3 mx-auto mt-6">
+    {filteredCountries.map((country, index) => (
+      <Card
+        key={index}
+        image={country.flag}
+        name={country.name}
+        population={country.population}
+        capital={country.capital}
+      />
+    ))}
+  </div>
   )
 }
+
+export default ListCard

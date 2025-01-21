@@ -1,24 +1,58 @@
 'use client';
 import { useState } from 'react';
-import { countriesData } from '../data/Data';
-import Card from '../components/Card';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilteredCountry } from '../redux/slice/countriesSlice';
+import type { RootState } from '@/redux/store';
+import { countriesData } from '../data/Data'; // countriesData'yı içe aktar
 
 export default function Form() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredCountries, setFilteredCountries] = useState(countriesData);
+  const dispatch = useDispatch();
+  const filteredCountries = useSelector((state: RootState) => state.country.filteredCountries);
+  const [reverseName, setReverseName] = useState(false);
+  const [reverseCapital, setReverseCapital] = useState(false);
+  const [reversePopulation, setReversePopulation] = useState(false);
 
-  // Arama terimini güncelle ve ülkeleri filtrele
-  const handleSearch = (e) => {
+  const sortCountriesByName = () => {
+    const currentCountries = filteredCountries.length > 0 ? filteredCountries : countriesData;
+    const sorted = [...currentCountries].sort((a, b) => a.name.localeCompare(b.name));
+    
+    const finalSorted = reverseName ?  sorted: sorted.reverse()
+    dispatch(setFilteredCountry(finalSorted));
+    
+    setReverseName(!reverseName);
+  };
+
+  const sortCountriesByCapital = () => {
+    const currentCountries = filteredCountries.length > 0 ? filteredCountries : countriesData;
+    const sorted = [...currentCountries].sort((a, b) => a.capital.localeCompare(b.capital));
+    
+    const finalSorted = reverseCapital ? sorted.reverse() : sorted;
+    dispatch(setFilteredCountry(finalSorted));
+    
+    setReverseCapital(!reverseCapital);
+  };
+
+  const sortCountriesByPopulation = () => {
+    const currentCountries = filteredCountries.length > 0 ? filteredCountries : countriesData;
+    const sorted = [...currentCountries].sort((a, b) => a.population - b.population);
+    
+    const finalSorted = reversePopulation ? sorted: sorted.reverse() 
+    dispatch(setFilteredCountry(finalSorted));
+    
+    setReversePopulation(!reversePopulation);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
 
     const filtered = countriesData.filter(country =>
       country.name.toLowerCase().startsWith(value.toLowerCase())
     );
-    setFilteredCountries(filtered);
+    dispatch(setFilteredCountry(filtered));
   };
 
-  // Filtrelenen ülkeleri Card bileşeninde göster
   return (
     <>
       <form className="mx-auto md:w-[600px] my-4 p-6 bg-white shadow-lg rounded-lg">
@@ -32,35 +66,37 @@ export default function Form() {
           />
           <button
             type="button"
+            onClick={() => handleSearch({ target: { value: searchTerm } } as React.ChangeEvent<HTMLInputElement>)}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition"
           >
             Search Country
           </button>
         </div>
         <div className="grid grid-cols-3 gap-4 mt-6">
-          <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition">
-            Name
+          <button
+            type="button"
+            onClick={sortCountriesByName}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition"
+          >
+            Sort by Name {reverseName ? "A-Z" : "Z-A"}
           </button>
-          <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition">
-            Capital
+          <button
+            type="button"
+            onClick={sortCountriesByCapital}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition"
+          >
+            Sort by Capital {reverseCapital ? "Z-A" : "A-Z"}
+            
           </button>
-          <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition">
-            Population
+          <button
+            type="button"
+            onClick={sortCountriesByPopulation}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition"
+          >
+            Sort Most population {reversePopulation ? "min" : "max"}
           </button>
         </div>
       </form>
-
-      <div className="flex flex-wrap justify-center  gap-3 mx-auto mt-6">
-  {filteredCountries.map((country) => (
-    <Card
-      key={country.population}
-      image={country.flag}
-      name={country.name}
-      population={country.population}
-      capital={country.capital}
-    />
-  ))}
-</div>
     </>
   );
 }

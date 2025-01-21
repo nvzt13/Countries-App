@@ -1,31 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { countriesData } from '../../data/Data';
 
 export interface CounterState {
-  count: number
+  filteredCountries: Array<any>
 }
 
 const initialState: CounterState = {
-  count: 0,
+  filteredCountries: countriesData,
+
 }
 
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: 'countries',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.count += 1
-    },
-    decrement: (state) => {
-      state.count -= 1
-    },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.count += action.payload
+    setFilteredCountry(state, action: PayloadAction<any>) {
+      state.filteredCountries = action.payload;
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { setFilteredCountry } = counterSlice.actions
 
 export default counterSlice.reducer
