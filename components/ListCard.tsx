@@ -8,8 +8,7 @@ import React from 'react'
 const ListCard = () => {
   const filteredCountries = useSelector((state: RootState) => state.country.filteredCountries)
   return (
-    
-    <div className="flex flex-wrap justify-center  gap-3 mx-auto mt-6">
+    <div className="flex flex-wrap justify-center gap-3 mx-auto mt-6">
     {filteredCountries.map((country, index) => (
       <Card
         key={index}
