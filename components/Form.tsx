@@ -39,28 +39,28 @@ export default function Form() {
         </div>
         <div className="grid grid-cols-3 gap-4 mt-6">
           <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition">
-            Sort A-Z
+            Name
+          </button>
+          <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition">
+            Capital
           </button>
           <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition">
             Population
           </button>
-          <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition">
-            Reset
-          </button>
         </div>
       </form>
 
-      <div className="grid grid-cols-3 auto-cols-fr gap-3 mx-auto">
-        {filteredCountries.map((country) => (
-          <Card
-            key={country.population}
-            image={country.flag}
-            name={country.name}
-            population={country.population}
-            capital={country.capital}
-          />
-        ))}
-      </div>
+      <div className="flex flex-wrap justify-center  gap-3 mx-auto mt-6">
+  {filteredCountries.map((country) => (
+    <Card
+      key={country.population}
+      image={country.flag}
+      name={country.name}
+      population={country.population}
+      capital={country.capital}
+    />
+  ))}
+</div>
     </>
   );
 }

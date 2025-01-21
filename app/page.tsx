@@ -9,6 +9,7 @@ export default function Home() {
       Countries App
     </h1>
     <Form />
+    <ListCard />
   </main>
     )
 }
