@@ -9,6 +9,9 @@ export default function Home() {
     </h1>
     <Form />
     <ListCard />
+    <footer className="bg-[#000] text-white text-center py-3 mt-5 items-center text-2xl" >
+      &copy; by Nevzat Atalay
+    </footer>
   </main>
     )
 }
